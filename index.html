@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>TERMINAL-X | GATE</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="gate-body">
+    <div class="gate-container">
+        <h1>TERMINAL-X</h1>
+        <p class="status">SYSTEM: LOCKED</p>
+        <div class="login-box">
+            <input type="password" id="pass" placeholder="ACCESS CODE...">
+            <button onclick="checkPass()">CONNECT</button>
+        </div>
+        <p id="hint">hint: 127.0.0.1</p>
+    </div>
+    <script>
+        function checkPass() {
+            // 合言葉は「127.0.0.1」
+            if(document.getElementById('pass').value === '127.0.0.1') {
+                location.href = 'hub.html';
+            } else {
+                alert('ACCESS DENIED');
+            }
+        }
+    </script>
+</body>
+</html>
