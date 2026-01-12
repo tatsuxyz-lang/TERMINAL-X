@@ -5,40 +5,36 @@
     <title>TERMINAL-X | COCKPIT</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* コックピット専用の計器デザイン */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        .gauge-box {
-            border: 1px double #00ff41;
-            padding: 10px;
-            font-size: 0.8rem;
-            text-align: left;
-            position: relative;
-            overflow: hidden;
-        }
-        .gauge-box::before {
-            content: "SCANNING...";
-            position: absolute;
-            right: 5px; top: 5px;
-            font-size: 0.6rem;
-            animation: blink 0.5s infinite;
-        }
-        .active-log {
-            height: 100px;
-            overflow-y: auto;
-            font-size: 0.7rem;
-            color: #008f11;
-            border-top: 1px solid #008f11;
-            margin-top: 10px;
-        }
-        .big-number { font-size: 2rem; display: block; text-align: center; }
-    </style>
+    /* スマホで「今何が起きてるか」をデカく見せる */
+    .mobile-gauge {
+        display: block;
+        width: 90%;
+        margin: 10px auto;
+        padding: 15px;
+        background: #001100;
+        border: 2px solid #00ff41;
+    }
+    .status-indicator {
+        font-size: 2.5rem; /* デカい文字で状態を表示 */
+        font-weight: bold;
+        display: block;
+    }
+    .action-btn {
+        width: 90%;
+        padding: 20px; /* 指で押しやすい高さ */
+        font-size: 1.2rem;
+        margin: 10px 0;
+    }
+</style>
+
+<div class="mobile-gauge">
+    [ BUFFER STATUS ]
+    <span class="status-indicator" id="indicator">EMPTY</span>
+    <div id="packetLabel">READY TO CONNECT</div>
+</div>
+    
 </head>
+    
 <body>
     <h1>TERMINAL-X COCKPIT</h1>
 
