@@ -2,33 +2,104 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>TERMINAL-X | HUB</title>
+    <title>TERMINAL-X | COCKPIT</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* コックピット専用の計器デザイン */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .gauge-box {
+            border: 1px double #00ff41;
+            padding: 10px;
+            font-size: 0.8rem;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+        .gauge-box::before {
+            content: "SCANNING...";
+            position: absolute;
+            right: 5px; top: 5px;
+            font-size: 0.6rem;
+            animation: blink 0.5s infinite;
+        }
+        .active-log {
+            height: 100px;
+            overflow-y: auto;
+            font-size: 0.7rem;
+            color: #008f11;
+            border-top: 1px solid #008f11;
+            margin-top: 10px;
+        }
+        .big-number { font-size: 2rem; display: block; text-align: center; }
+    </style>
 </head>
 <body>
-    <h1>TERMINAL-X HUB</h1>
-    <div class="box">
-        <h3>ACTIVE TOOLS</h3>
-        <ul style="list-style: none; padding: 0; text-align: left; display: inline-block;">
-            <li>> <a href="stegano_in.html" style="color:#0f0;">スパイ入門 (ステガノ凸)</a></li>
-            <li>> <a href="stegano_out.html" style="color:#0f0;">抜け忍出口 (ステガノ凹)</a></li>
-            <li>> <a href="mimamori.html" style="color:#0f0;">デバイス監視 (RSSI)</a></li>
-        </ul>
+    <h1>TERMINAL-X COCKPIT</h1>
+
+    <div class="dashboard">
+        <div class="gauge-box">
+            [ SYSTEM STATUS ]
+            <span class="big-number">ONLINE</span>
+            <div class="active-log" id="sysLog">
+                > Initializing...<br>
+                > Kernel loaded...<br>
+                > Port 127.0.0.1 Open.
+            </div>
+        </div>
+
+        <div class="gauge-box">
+            [ LAST PACKET INFO ]
+            <span id="packetSize" class="big-number">0000</span>
+            <div class="active-log">
+                <span id="packetType">> Waiting for data...</span>
+            </div>
+        </div>
     </div>
 
     <div class="box">
-        <h3>LATEST PACKET</h3>
-        <textarea id="packetPreview" readonly style="width: 80%; height: 50px;"></textarea>
+        <h3>MISSION SELECT</h3>
+        <nav style="display: flex; justify-content: space-around; font-size: 0.9rem;">
+            <a href="stegano_in.html" style="color:#0f0;">[凸 ENCODE]</a>
+            <a href="stegano_out.html" style="color:#0f0;">[凹 DECODE]</a>
+            <a href="mimamori.html" style="color:#0f0;">[MONITOR]</a>
+        </nav>
+    </div>
+
+    <div class="box">
+        <h3>DATA BUFFER (LocalStorage)</h3>
+        <textarea id="packetPreview" readonly style="width: 95%; height: 80px; font-size: 0.7rem;"></textarea>
         <br><br>
-        <button onclick="loadPacket()">REFRESH</button>
+        <button onclick="copyToClip('packetPreview')">COPY BUFFER</button>
+        <button onclick="clearBuffer()" style="background:#800; color:#fff;">CLEAR</button>
     </div>
 
+    <script src="js/base.js"></script>
     <script>
-        function loadPacket() {
-            const data = localStorage.getItem('last_packet');
-            document.getElementById('packetPreview').value = data || "NO DATA";
+        function updateDashboard() {
+            const data = localStorage.getItem('last_packet') || "";
+            document.getElementById('packetPreview').value = data;
+            document.getElementById('packetSize').innerText = data.length.toString().padStart(4, '0');
+            
+            if(data.startsWith("STG")) {
+                document.getElementById('packetType').innerText = "> Steganography detected.";
+            } else if(data !== "") {
+                document.getElementById('packetType').innerText = "> Raw data packet.";
+            }
         }
-        window.onload = loadPacket;
+
+        function clearBuffer() {
+            if(confirm("DELETE ALL DATA?")) {
+                localStorage.removeItem('last_packet');
+                location.reload();
+            }
+        }
+        window.onload = updateDashboard;
     </script>
 </body>
 </html>
