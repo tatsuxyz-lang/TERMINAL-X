@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>TERMINAL-X | HUB</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <h1>TERMINAL-X HUB</h1>
+    <div class="box">
+        <h3>ACTIVE TOOLS</h3>
+        <ul style="list-style: none; padding: 0; text-align: left; display: inline-block;">
+            <li>> <a href="stegano_in.html" style="color:#0f0;">スパイ入門 (ステガノ凸)</a></li>
+            <li>> <a href="stegano_out.html" style="color:#0f0;">抜け忍出口 (ステガノ凹)</a></li>
+            <li>> <a href="mimamori.html" style="color:#0f0;">デバイス監視 (RSSI)</a></li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h3>LATEST PACKET</h3>
+        <textarea id="packetPreview" readonly style="width: 80%; height: 50px;"></textarea>
+        <br><br>
+        <button onclick="loadPacket()">REFRESH</button>
+    </div>
+
+    <script>
+        function loadPacket() {
+            const data = localStorage.getItem('last_packet');
+            document.getElementById('packetPreview').value = data || "NO DATA";
+        }
+        window.onload = loadPacket;
+    </script>
+</body>
+</html>
